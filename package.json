@@ -1,0 +1,17 @@
+{
+  "name": "demo-web-shop-automation",
+  "version": "1.0.0",
+  "description": "Automated testing project for the Demo Web Shop application. Focused on end-to-end test scenarios using TypeScript and Playwright. Validates critical workflows, UI interactions, and user experiences. Designed for learning and mastering QA automation practices.",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@playwright/test": "^1.52.0",
+    "@types/node": "^22.15.17"
+  }
+}
