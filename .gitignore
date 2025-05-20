@@ -12,7 +12,6 @@ node_modules/
 
 # Environment and secrets
 .env
-config/secrets.ts
 
 # Logs
 *.log
