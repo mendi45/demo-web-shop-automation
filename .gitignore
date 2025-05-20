@@ -1,7 +1,25 @@
+# Dependencies
+node_modules/
 
 # Playwright
-node_modules/
 /test-results/
 /playwright-report/
-/blob-report/
 /playwright/.cache/
+
+# IDE
+.idea/
+.vscode/
+
+# Environment and secrets
+.env
+config/secrets.ts
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
