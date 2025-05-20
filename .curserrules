@@ -4,7 +4,7 @@
 
 // ✅ Always use Playwright official documentation as the main reference.
 // Docs: https://playwright.dev/docs
-
+ 
 export const curserRules = {
   // Test Design
   testStructure: {
