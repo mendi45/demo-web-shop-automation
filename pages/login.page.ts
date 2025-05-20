@@ -1,3 +1,4 @@
+import { secrets } from '../config/secrets';
 import { BasePage } from './base.page';
 import { Locator, Page } from '@playwright/test';
 
@@ -8,6 +9,17 @@ export class LoginPage extends BasePage {
     loginButton: Locator;
     rememberMeCheckbox: Locator;
     returningCustomerWrapper: Locator;
+    headerLinks: Locator;
+    loginErrorMessage: Locator;
+    connectedAccount: Locator;
+    headerLinksWrapper: Locator;
+
+    loginHrefs = {
+        login: '/login',
+        register: '/register',
+        myAccount: '/customer/info',
+        logout: '/logout'
+    };
 
     constructor(public page: Page) {
         super(page);
@@ -16,10 +28,14 @@ export class LoginPage extends BasePage {
         this.emailInput = this.inputsArea.locator('.email');
         this.passwordInput = this.inputsArea.locator('.password');  
         this.loginButton = this.returningCustomerWrapper.locator('input.button-1.login-button');
-        this.rememberMeCheckbox = this.page.getByRole('checkbox', { name: 'RememberMe' });
+        this.rememberMeCheckbox = this.page.getByTestId('RememberMe');
+        this.loginErrorMessage = this.page.locator('.validation-summary-errors');
+        this.headerLinks = this.page.locator('.header-links');
+        this.connectedAccount = this.headerLinks.locator('.account');
+        this.headerLinksWrapper = this.page.locator('.header-links-wrapper');
     }
     
-    async login(email: string, password: string): Promise<void> {
+    async preformLogin(email: string, password: string): Promise<void> {
         await this.fillText(this.emailInput, email);
         await this.fillText(this.passwordInput, password);
         await this.clickElement(this.loginButton);
@@ -28,5 +44,23 @@ export class LoginPage extends BasePage {
     async getRememberMeCheckboxState(): Promise<boolean> {
         const isChecked = await this.rememberMeCheckbox.isChecked();
         return isChecked;
+    }
+
+    async getConnectedAccount(): Promise<string> {
+        const connectedAccountText = await this.connectedAccount.textContent();
+        return connectedAccountText || '';
+    }
+
+    async getLoginError(): Promise<{ message: string; details: string[] }> {
+        const errorMessageText = await this.loginErrorMessage.innerText();
+        const errorList = await this.loginErrorMessage.locator('ul li').allTextContents();
+        return {
+            message: errorMessageText.trim(),
+            details: errorList
+        };
+    }
+
+    async clickOnHref(href: string): Promise<void> {
+        await this.clickElement(this.headerLinksWrapper.locator(`a[href="${href}"]`));
     }
 }

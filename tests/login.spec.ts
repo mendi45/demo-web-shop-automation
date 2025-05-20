@@ -1,32 +1,53 @@
-import { test, expect } from '@playwright/test';
+import { test, expect, Browser, BrowserContext, Page } from '@playwright/test';
 import { BasePage } from '../pages/base.page';
 import { LoginPage } from '../pages/login.page';
 import { describe } from 'node:test';
+import { secrets } from '../config/secrets';
+import { ErrorMessages } from '../consts/errors';
+import { Selectors } from '../consts/selectors';
 
 describe('Login Page Tests', () => {
+    let browser: Browser;
+    let context: BrowserContext;
+    let page: Page;
     let loginPage: LoginPage;
     let basePage: BasePage;
     const email = 'someemail@gmail.com'; 
-    const password = 'somepassword';
+    const password = 'somePassword';
 
-    test.beforeEach(async ({ page }) => {
-    basePage = new BasePage(page);
-    loginPage = new LoginPage(page);
-    await basePage.open('https://demowebshop.tricentis.com/login');
+    test.beforeAll(async ({ browser: testBrowser }) => {
+        browser = testBrowser;
+        context = await browser.newContext();
+        page = await context.newPage();
+        basePage = new BasePage(page);
+        loginPage = new LoginPage(page);
+        await basePage.open(secrets.baseUrl);
+        await loginPage.clickOnHref(loginPage.loginHrefs.login);
+    });
+
+    test.afterAll(async () => {
+        await context.close();
     });
 
     test('check if login page is opened', async () => {
         const pageTitle = await basePage.getTitle();
-        expect(pageTitle).toBe('Demo Web Shop. Login');
+        expect(pageTitle).toBe(Selectors.login.title);
     });
 
-    test('check if remember me checkbox is checked', async () => {
-        const isChecked = await loginPage.getRememberMeCheckboxState();
-        expect(isChecked).toBe(false);
+    test('perform login with invalid credentials', async () => {
+        await loginPage.preformLogin(email, password);
+        const { message, details } = await loginPage.getLoginError();
+        expect(message).toContain(ErrorMessages.login.loginWasUnsuccessful);
+        expect(details).toContain(ErrorMessages.login.credentialsIncorrect);
     });
 
-    test('preforme login with valid credentials', async () => {
-        await loginPage.login(email, password);
-        // Add your assertions here to verify successful login
+    test('perform login with valid credentials', async () => {
+        await loginPage.preformLogin(
+            secrets.users.admin.email,
+            secrets.users.admin.password
+        );
+        
+        const connectedAccount = await loginPage.getConnectedAccount();
+        expect(connectedAccount).toBe(secrets.users.admin.email);
     });
 });
