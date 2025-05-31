@@ -63,4 +63,21 @@ export class LoginPage extends BasePage {
     async clickOnHref(href: string): Promise<void> {
         await this.clickElement(this.headerLinksWrapper.locator(`a[href="${href}"]`));
     }
+
+
+    /**
+     * Get the text of all top menu items (trimmed, top-level only)
+     */
+    async getTopMenuItemsText(): Promise<string[]> {
+        const items = this.page.locator('.top-menu > li');
+        const count = await this.countElements(items);
+        const texts: string[] = [];
+        
+        for (let i = 0; i < count; i++) {
+            const anchor = items.nth(i).locator('a').first();
+            const text = (await this.getText(anchor))?.trim();
+            if (text) texts.push(text);
+        }
+        return texts;
+    }
 }
