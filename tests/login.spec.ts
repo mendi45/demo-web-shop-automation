@@ -1,12 +1,11 @@
 import { test, expect, Browser, BrowserContext, Page } from '@playwright/test';
 import { BasePage } from '../pages/base.page';
 import { LoginPage } from '../pages/login.page';
-import { describe } from 'node:test';
-import { secrets } from '../config/secrets';
 import { ErrorMessages } from '../consts/errors';
 import { Selectors } from '../consts/selectors';
+import { secrets } from '../config/secrets';
 
-describe('Login Page Tests', () => {
+test.describe('Login Page Tests', () => {
     let browser: Browser;
     let context: BrowserContext;
     let page: Page;
