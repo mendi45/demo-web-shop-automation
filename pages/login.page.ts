@@ -68,7 +68,7 @@ export class LoginPage extends BasePage {
     /**
      * Get the text of all top menu items (trimmed, top-level only)
      */
-    async getTopMenuItemsText() {
+    async getTopMenuItemsText(): Promise<string[]> {
         const items = this.page.locator('.top-menu > li');
         const count = await this.countElements(items);
         const texts: string[] = [];
