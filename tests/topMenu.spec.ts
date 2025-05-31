@@ -1,4 +1,4 @@
-import { LoginPage } from './../pages/login.page';
+import { LoginPage } from '../pages/login.page';
 import { test, expect, Browser, BrowserContext, Page } from '@playwright/test';
 import { BasePage } from '../pages/base.page';
 import { TestData } from '../consts/selectors';
