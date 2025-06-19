@@ -7,12 +7,12 @@ import { CategoryData, ProductTypeKey } from './types';
 export const Selectors = {
   // Header
   header: {
-    loginLink: 'a[href="/login"]',
-    registerLink: 'a[href="/register"]',
-    shoppingCartLink: 'a[href="/cart"]',
-    wishlistLink: 'a[href="/wishlist"]',
-    accountLink: 'a[href="/customer/info"]',
-    logoutLink: 'a[href="/logout"]'
+    loginLink: '.header-links a[href="/login"]',
+    registerLink: '.header-links a[href="/register"]',
+    shoppingCartLink: '.header-links a[href="/cart"]',
+    wishlistLink: '.header-links a[href="/wishlist"]',
+    accountLink: '.header-links a[href="/customer/info"]',
+    logoutLink: '.header-links a[href="/logout"]'
   },
 
   // Login Page
