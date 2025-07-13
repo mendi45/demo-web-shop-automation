@@ -6,7 +6,7 @@ import { secrets } from '../config/secrets';
 
 // Simple comment: Test for top menu categories
 
-test.describe('Top Menu Categories', () => {
+test.describe.serial('Top Menu Categories', () => {
     let browser: Browser;
     let context: BrowserContext;
     let page: Page;

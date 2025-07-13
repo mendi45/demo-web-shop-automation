@@ -5,7 +5,7 @@ import { ErrorMessages } from '../consts/errors';
 import { Selectors } from '../consts/selectors';
 import { secrets } from '../config/secrets';
 
-test.describe('Login Page Tests', () => {
+test.describe.serial('Login Page Tests', () => {
     let browser: Browser;
     let context: BrowserContext;
     let page: Page;
@@ -21,6 +21,7 @@ test.describe('Login Page Tests', () => {
         basePage = new BasePage(page);
         loginPage = new LoginPage(page);
         await basePage.open(secrets.baseUrl);
+        await basePage.waitForElementToBeVisible(loginPage.headerLinksWrapper);
         await loginPage.clickOnHref(loginPage.loginHrefs.login);
     });
 
