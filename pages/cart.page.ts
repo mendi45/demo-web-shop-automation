@@ -2,7 +2,7 @@ import { type Locator, type Page } from '@playwright/test';
 import { BasePage } from './base.page';
 import { Selectors } from '../consts/selectors';
 
-// Simple comment: CartPage handles all cart actions using BasePage
+
 export class CartPage extends BasePage {
     cartTable: Locator;
     checkoutButton: Locator;
@@ -10,6 +10,7 @@ export class CartPage extends BasePage {
     removeItemCheckbox: Locator;
     continueShoppingButton: Locator;
     cartItemsCounter: Locator;
+    addToCartSuccessNotification: Locator;
 
     constructor(public page: Page) {
         super(page);
@@ -19,6 +20,7 @@ export class CartPage extends BasePage {
         this.removeItemCheckbox = this.page.locator(Selectors.cart.removeItemCheckbox);
         this.continueShoppingButton = this.page.locator(Selectors.cart.continueShoppingButton);
         this.cartItemsCounter = this.page.locator(Selectors.header.shoppingCartLink).locator('.cart-qty');
+        this.addToCartSuccessNotification = this.page.locator('#bar-notification.bar-notification.success');
     }
 
     async openCart() {
@@ -37,11 +39,14 @@ export class CartPage extends BasePage {
         if (!cartTableExists) return -999;
         return await this.getCount(this.cartTable.locator('tbody tr'));
     }
-//TODO: fix the return value 
+
     async getCartItemCountFromHeader(): Promise<string> {
         const cartItemsCounter = await this.cartItemsCounter.textContent();
-        // Simple comment: Extract value between '(' and ')'
         const match = (cartItemsCounter || '').match(/\((\d+)\)/);
         return match && match[1] || '999';
+    }
+
+    async waitForAddToCartSuccessNotification(): Promise<void> {
+        await this.waitForElementToBeVisible(this.addToCartSuccessNotification);
     }
 } 

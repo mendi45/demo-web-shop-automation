@@ -4,9 +4,7 @@ import { CartPage } from '../pages/cart.page';
 import { Selectors } from '../consts/selectors';
 import { secrets } from '../config/secrets';
 
-// Simple comment: Test for adding one item to the cart
-
-test.describe('Add To Cart Tests', () => {
+test.describe.serial('Add To Cart Tests', () => {
     let page: Page;
     let browser: Browser;
     let context: BrowserContext;
@@ -29,20 +27,19 @@ test.describe('Add To Cart Tests', () => {
     test('add one item to cart and verify', async () => {
        
         await test.step('open cart and verify it is empty', async () => {
-        await cartPage.openCart();
         const cartItemCount = await cartPage.getCartItemCountFromHeader();
-        expect(cartItemCount).toBe(0);
+        expect(cartItemCount).toBe('0');
         });
 
         await test.step('add one item to cart', async () => {
-            await basePage.open(secrets.baseUrl);
-            await page.locator(Selectors.product.addToCartButton).first().click();
+            await page.locator(Selectors.product.addToCartButton).nth(1).click();
+            await cartPage.waitForAddToCartSuccessNotification();
+            await expect(cartPage.addToCartSuccessNotification).toBeVisible();
         });
 
         await test.step('open cart and verify it has one item', async () => {
-        await cartPage.openCart();
         const cartItemCount = await cartPage.getCartItemCountFromHeader();
-        expect(cartItemCount).toBe(1);
+        expect(cartItemCount).toBe('1');
         });
     });
 }); 
